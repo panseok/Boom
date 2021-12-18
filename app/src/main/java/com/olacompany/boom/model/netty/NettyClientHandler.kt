@@ -1,5 +1,8 @@
 package com.olacompany.boom.model.netty
 
+import androidx.lifecycle.MutableLiveData
+import com.olacompany.boom.model.login.Login
+import com.olacompany.boom.model.login.LoginPacket
 import com.olacompany.boom.opcode.ReceiveOpcode
 import com.olacompany.boom.tools.LittleEndianReader
 import io.netty.channel.ChannelHandlerContext
@@ -9,12 +12,12 @@ import io.netty.channel.ChannelInboundHandlerAdapter
 class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
     ChannelInboundHandlerAdapter() {
     override fun channelActive(ctx: ChannelHandlerContext) {
-      /*  if (clientStatus === com.olacompany.boom.model.netty.ClientStatus.LOGIN) {
-            if (com.olacompany.boom.model.netty.NettyClient.getSession() != null) { // channel > login
-                com.olacompany.boom.model.netty.NettyClient.getSession().close()
-            }
-            com.olacompany.boom.model.netty.NettyClient.setSession(ctx.channel())
-        } else if (clientStatus === com.olacompany.boom.model.netty.ClientStatus.CHANNEL) {
+        if (clientStatus === ClientStatus.LOGIN) {
+            NettyClient.setSession(ctx.channel())
+
+
+        }/* else if (clientStatus === com.olacompany.boom.model.netty.ClientStatus.CHANNEL) {
+
             com.olacompany.boom.model.netty.NettyClient.getSession().close()
             com.olacompany.boom.model.netty.NettyClient.setSession(ctx.channel())
             com.olacompany.boom.model.netty.NettyClient.getSession()
@@ -25,17 +28,17 @@ class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
     override fun channelRead(ctx: ChannelHandlerContext, packet: Any) {
         val r: LittleEndianReader = packet as LittleEndianReader
         val opcode: Int = r.readShort().toInt()
-      /*  for (recv in ReceiveOpcode.values()) {
-            if (recv.ordinal() === opcode) {
+        for (recv in ReceiveOpcode.values()) {
+            if (recv.ordinal === opcode) {
                 try {
-                    System.out.println("DEBUG " + recv.name().toString() + "  " + r.toString())
+                    System.out.println("DEBUG " + recv.name + "  " + r.toString())
                     handlePacket(r, recv)
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
                 return
             }
-        }*/
+        }
     }
 
     /*
@@ -64,25 +67,31 @@ class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
     }
 
     companion object {
+        //로그인 라이브 데이터
+        val loginModelData= MutableLiveData<Login>()
+
+        init {
+            loginModelData.postValue(Login())
+        }
+
         private fun handlePacket(r: LittleEndianReader, recv: ReceiveOpcode) {
             when (recv) {
-               /* SERVER_PING -> {
-                    com.olacompany.boom.model.netty.NettyClient.getSession()
-                        .writeAndFlush(LoginPacket.sendPong())
+                ReceiveOpcode.SERVER_PING -> {
+                    NettyClient.getSession().writeAndFlush(LoginPacket.sendPong())
                 }
-                SERVER_NOTICE -> {
-                    LobbyActivity.getInstance().getServerNoticeList(r)
+                ReceiveOpcode.SERVER_NOTICE -> {
+                    //LobbyActivity.getInstance().getServerNoticeList(r)
                 }
-                LOGIN_STATUS_MSG -> {
-                    LoginActivity.showLoginStatusMsg(r)
+                ReceiveOpcode.LOGIN_STATUS_MSG -> {
+                //    LoginActivity.showLoginStatusMsg(r)
                 }
-                LOGIN_CREATE_NAME -> {
-                    LoginActivity.CreateUserNameAlertDialog()
+                ReceiveOpcode.LOGIN_CREATE_NAME -> {
+                    loginModelData.value?.setNoNameUser()
                 }
-                CONNECT_LOGIN_SERVER_ONLINE -> {
-                    LoadingActivity.setConnected(true)
+                ReceiveOpcode.CONNECT_LOGIN_SERVER_ONLINE -> {
+                //    LoadingActivity.setConnected(true)
                 }
-                CONNECT_CHANNEL_SERVER -> {
+               /* CONNECT_CHANNEL_SERVER -> {
                     DevTools.startProgressDialogHandleLooper(LoginActivity.getInstance())
                     com.olacompany.olachat.netty.NettyClient.initChannelServer(1)
                 }

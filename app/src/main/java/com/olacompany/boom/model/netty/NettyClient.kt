@@ -38,6 +38,10 @@ class NettyClient(channel: Channel) {
             userMemo = r.readLengthAsciiString()
         }
 
+        fun setSession(session: Channel){
+            Companion.session = session
+        }
+
         fun getSession(): Channel{
             return session
         }

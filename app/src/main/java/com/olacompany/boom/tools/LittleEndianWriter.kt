@@ -1,18 +1,8 @@
 package com.olacompany.boom.tools
 
-import com.olacompany.boom.tools.HexTool
-import java.lang.StringBuilder
-import java.lang.Exception
-import java.io.ByteArrayOutputStream
-import com.olacompany.boom.tools.ByteArrayByteStream
-import java.nio.charset.StandardCharsets
 import android.graphics.Point
-import java.io.IOException
-import kotlin.jvm.JvmOverloads
-import com.olacompany.boom.tools.LittleEndianWriter
-import java.nio.charset.Charset
-import com.olacompany.boom.tools.ByteInputStream
-import kotlin.Throws
+import java.io.ByteArrayOutputStream
+import java.nio.charset.StandardCharsets
 
 class LittleEndianWriter @JvmOverloads constructor(size: Int = 32) {
     private val baos: ByteArrayOutputStream
@@ -50,10 +40,10 @@ class LittleEndianWriter @JvmOverloads constructor(size: Int = 32) {
     }
 
     fun writeInt(i: Long) {
-        baos.write((i and 0xFF) as Int)
-        baos.write((i ushr 8 and 0xFF) as Int)
-        baos.write((i ushr 16 and 0xFF) as Int)
-        baos.write((i ushr 24 and 0xFF) as Int)
+        baos.write((i and 0xFF).toInt())
+        baos.write((i ushr 8 and 0xFF).toInt())
+        baos.write((i ushr 16 and 0xFF).toInt())
+        baos.write((i ushr 24 and 0xFF).toInt())
     }
 
     fun writeAsciiString(s: String) {
@@ -87,14 +77,14 @@ class LittleEndianWriter @JvmOverloads constructor(size: Int = 32) {
     }
 
     fun writeLong(l: Long) {
-        baos.write((l and 0xFF) as Int)
-        baos.write((l ushr 8 and 0xFF) as Int)
-        baos.write((l ushr 16 and 0xFF) as Int)
-        baos.write((l ushr 24 and 0xFF) as Int)
-        baos.write((l ushr 32 and 0xFF) as Int)
-        baos.write((l ushr 40 and 0xFF) as Int)
-        baos.write((l ushr 48 and 0xFF) as Int)
-        baos.write((l ushr 56 and 0xFF) as Int)
+        baos.write((l and 0xFF).toInt())
+        baos.write((l ushr 8 and 0xFF).toInt())
+        baos.write((l ushr 16 and 0xFF).toInt())
+        baos.write((l ushr 24 and 0xFF).toInt())
+        baos.write((l ushr 32 and 0xFF).toInt())
+        baos.write((l ushr 40 and 0xFF).toInt())
+        baos.write((l ushr 48 and 0xFF).toInt())
+        baos.write((l ushr 56 and 0xFF).toInt())
     }
 
     fun writeReversedLong(l: Long) {
