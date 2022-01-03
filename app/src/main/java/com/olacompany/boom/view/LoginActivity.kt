@@ -3,6 +3,7 @@ package com.olacompany.boom.view
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -32,10 +33,16 @@ class LoginActivity : AppCompatActivity() {
             requestLogin()
         }
 
-        loginViewModel.haveName.observe(this){
+        loginViewModel.haveNickName.observe(this){
             //닉네임이 없다면 (false)상태면 다이얼로그창을 띄움
-            if(!loginViewModel.haveName.value!!){
+            if(!loginViewModel.haveNickName.value!!){
                 createNameDialog()
+            }
+        }
+
+        loginViewModel.loginNotice.observe(this){
+            if(!loginViewModel.loginNotice.equals("")){
+                Toast.makeText(this,loginViewModel.loginNotice.value,Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -52,7 +59,6 @@ class LoginActivity : AppCompatActivity() {
             .create()
         dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
         dialog.show()
-
 
 
     }

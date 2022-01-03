@@ -77,7 +77,7 @@ class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
                     //LobbyActivity.getInstance().getServerNoticeList(r)
                 }
                 ReceiveOpcode.LOGIN_STATUS_MSG -> {
-                //    LoginActivity.showLoginStatusMsg(r)
+                    Login.getLoginNoticeData(r)
                 }
                 ReceiveOpcode.LOGIN_CREATE_NAME -> {
                     //설계 미스.
@@ -86,11 +86,12 @@ class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
                 ReceiveOpcode.CONNECT_LOGIN_SERVER_ONLINE -> {
                 //    LoadingActivity.setConnected(true)
                 }
-               /* CONNECT_CHANNEL_SERVER -> {
-                    DevTools.startProgressDialogHandleLooper(LoginActivity.getInstance())
-                    com.olacompany.olachat.netty.NettyClient.initChannelServer(1)
+                ReceiveOpcode.CONNECT_CHANNEL_SERVER -> {
+                    Login.setLoginSucceed(true)
+                    //DevTools.startProgressDialogHandleLooper(LoginActivity.getInstance())
+                    //com.olacompany.olachat.netty.NettyClient.initChannelServer(1)
                 }
-                CONNECT_CHANNEL_SERVER_ONLINE -> {
+                /*CONNECT_CHANNEL_SERVER_ONLINE -> {
                     com.olacompany.olachat.netty.NettyClient.setUserInfo(r)
                     LoginActivity.getInstance().startLobbyActivity()
                 }

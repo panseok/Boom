@@ -17,28 +17,33 @@ import com.olacompany.boom.model.netty.NettyClient
 class LoginViewModel : ViewModel() {
 
     val text = MutableLiveData<String>()
-    val haveName = MutableLiveData<Boolean>()
+    val loginNotice = MutableLiveData<String>()
+    val haveNickName = MutableLiveData<Boolean>()
     val isConnect: Boolean = NettyClient.initLoginServer()
+
     val nameCeacking = Login.haveName.subscribe {
-        haveName.postValue(Login.haveName.value)
+        haveNickName.postValue(Login.haveName.value)
     }
+    val getLoginNotice = Login.loginNotice.subscribe{
+        loginNotice.postValue(Login.loginNotice.value)
+    }
+
+
 
     init{
         text.value = "Boom 에 오신 것을 환영합니다"
-        haveName.value = true
+        haveNickName.value = true
         Log.e("LoginViewModel","LoginServer Connect : ${isConnect}")
     }
 
 
     fun loginSucced(userId: Long){
         Login.setClientUserId(userId)
-
         if(isConnect){
             text.postValue("현재 서버는 정상 입니다")
         }else{
             text.postValue("현재 서버는 점검 중 입니다")
         }
-
     }
 
 

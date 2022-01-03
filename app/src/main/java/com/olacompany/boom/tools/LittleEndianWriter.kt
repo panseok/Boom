@@ -15,7 +15,7 @@ class LittleEndianWriter @JvmOverloads constructor(size: Int = 32) {
 
     fun write(b: ByteArray) {
         for (x in b.indices) {
-            baos.write(b[x] as ByteArray)
+            baos.write(byteArrayOf(b[x]))
         }
     }
 

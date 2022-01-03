@@ -20,5 +20,12 @@ class LoginPacket {
             return o.packet
         }
 
+        fun sendCheckName(name: String?): ByteArray? {
+            val o = LittleEndianWriter()
+            o.writeShort(SendOpcode.USER_CHECK_NAME.ordinal)
+            o.writeLengthAsciiString(name!!)
+            return o.packet
+        }
+
     }
 }

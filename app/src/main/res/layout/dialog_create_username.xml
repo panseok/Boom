@@ -43,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@={logindvm.name}"
+                android:afterTextChanged="@{logindvm.checkNickNameFirst}"
+                android:text="@={logindvm.inputName}"
                 android:textColor="@color/white"
                 android:hint="@string/createUserNameHint"
                 android:inputType="textPersonName"
@@ -56,7 +57,7 @@
                 android:layout_margin="10dp"
                 android:padding="5dp"
                 android:text="@{logindvm.checkNameNotice}"
-                android:textColor="@color/white"
+                android:textColor="@{logindvm.checkNameNoticeColor}"
                 />
             <View
                 android:layout_width="match_parent"
@@ -66,8 +67,8 @@
                 android:background="@drawable/btn_background2_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="확인"
-                android:onClick="@{() -> logindvm.test()}" />
+                android:text="생성"
+                android:onClick="@{() -> logindvm.sendCreateNameRequest()}" />
 
             <View
                 android:layout_width="match_parent"
