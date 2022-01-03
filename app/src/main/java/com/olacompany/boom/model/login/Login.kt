@@ -1,19 +1,30 @@
 package com.olacompany.boom.model.login
 
 import com.olacompany.boom.model.netty.NettyClient
+import io.reactivex.subjects.BehaviorSubject
 
 class Login {
 
-    var isNoNameUser = false
+    companion object{
+        var isLogin : BehaviorSubject<Boolean> = BehaviorSubject.create()
+        var haveName : BehaviorSubject<Boolean> = BehaviorSubject.create()
 
-    fun setClientUserId(userId: Long){
-        NettyClient.getSession().writeAndFlush(LoginPacket.sendLogin(userId))
-        NettyClient.setUserId(userId)
+        init {
+            haveName.onNext(true)
+            isLogin.onNext(false)
+        }
+
+
+        fun setHaveName(have: Boolean){
+            haveName.onNext(have)
+        }
+
+        fun setClientUserId(userId: Long){
+            NettyClient.getSession().writeAndFlush(LoginPacket.sendLogin(userId))
+            NettyClient.setUserId(userId)
+            isLogin.onNext(true)
+        }
+
     }
-
-    fun setNoNameUser(){
-        isNoNameUser = true
-    }
-
 
 }

@@ -1,50 +1,59 @@
 package com.olacompany.boom.view
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.olacompany.boom.R
 import com.olacompany.boom.databinding.ActivityLoginBinding
+import com.olacompany.boom.databinding.DialogCreateUsernameBinding
+import com.olacompany.boom.viewmodel.login.CreateNameViewModel
 import com.olacompany.boom.viewmodel.login.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
 
     val TAG = "LOGIN"
-    val login_viewModel: LoginViewModel by viewModels()
+    val loginViewModel: LoginViewModel by viewModels()
+    val creatNameViewModel: CreateNameViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login)
-       // binding.lifecycleOwner = this
-        binding.loginvm = login_viewModel
+        binding.lifecycleOwner = this
+        binding.loginvm = loginViewModel
 
         binding.kakaoLoginBtn.setOnClickListener {
             requestLogin()
         }
 
-        login_viewModel.boomLogin.observe(this){
-            if(it.isNoNameUser){
-                Toast.makeText(this,"닉네임이 없어요",Toast.LENGTH_LONG).show()
+        loginViewModel.haveName.observe(this){
+            //닉네임이 없다면 (false)상태면 다이얼로그창을 띄움
+            if(!loginViewModel.haveName.value!!){
+                createNameDialog()
             }
-        }
-
-        login_viewModel.text.observe(this){
-            Toast.makeText(this,"${it.toString()}",Toast.LENGTH_LONG).show()
         }
 
     }
 
-    private fun showCreateNameDialog(){
+    private fun createNameDialog(){
         val inflater = layoutInflater
-        val linearLayout = inflater.inflate(R.layout.dialog_create_username,null)
-        val binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this,R.layout.dialog_create_username)
+        val binding = DataBindingUtil.inflate<DialogCreateUsernameBinding>(inflater, R.layout.dialog_create_username, null, false)
         binding.lifecycleOwner = this
+        binding.logindvm = creatNameViewModel
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(binding.root)
+            .create()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        dialog.show()
+
+
 
     }
 
@@ -80,7 +89,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.e(TAG, "사용자 정보 요청 실패", error)
             }
             else if (user != null) {
-                login_viewModel.loginSucced(user.id)
+                loginViewModel.loginSucced(user.id)
             }
         }
     }

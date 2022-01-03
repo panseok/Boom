@@ -1,6 +1,5 @@
 package com.olacompany.boom.model.netty
 
-import androidx.lifecycle.MutableLiveData
 import com.olacompany.boom.model.login.Login
 import com.olacompany.boom.model.login.LoginPacket
 import com.olacompany.boom.opcode.ReceiveOpcode
@@ -67,12 +66,6 @@ class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
     }
 
     companion object {
-        //로그인 라이브 데이터
-        val loginModelData= MutableLiveData<Login>()
-
-        init {
-            loginModelData.postValue(Login())
-        }
 
         private fun handlePacket(r: LittleEndianReader, recv: ReceiveOpcode) {
             when (recv) {
@@ -80,13 +73,15 @@ class NettyClientHandler(var clientStatus: ClientStatus, var channel: Int) :
                     NettyClient.getSession().writeAndFlush(LoginPacket.sendPong())
                 }
                 ReceiveOpcode.SERVER_NOTICE -> {
+
                     //LobbyActivity.getInstance().getServerNoticeList(r)
                 }
                 ReceiveOpcode.LOGIN_STATUS_MSG -> {
                 //    LoginActivity.showLoginStatusMsg(r)
                 }
                 ReceiveOpcode.LOGIN_CREATE_NAME -> {
-                    loginModelData.value?.setNoNameUser()
+                    //설계 미스.
+                    Login.setHaveName(false)
                 }
                 ReceiveOpcode.CONNECT_LOGIN_SERVER_ONLINE -> {
                 //    LoadingActivity.setConnected(true)

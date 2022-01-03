@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.olacompany.boom.model.login.Login
 import com.olacompany.boom.model.netty.NettyClient
-import com.olacompany.boom.model.netty.NettyClientHandler
 
 /*
 *   의존 방향은 View -> ViewModel -> Model
@@ -18,31 +17,28 @@ import com.olacompany.boom.model.netty.NettyClientHandler
 class LoginViewModel : ViewModel() {
 
     val text = MutableLiveData<String>()
+    val haveName = MutableLiveData<Boolean>()
     val isConnect: Boolean = NettyClient.initLoginServer()
-    val boomLogin: MutableLiveData<Login>
+    val nameCeacking = Login.haveName.subscribe {
+        haveName.postValue(Login.haveName.value)
+    }
 
     init{
-        boomLogin = NettyClientHandler.loginModelData
-        text.value = "HELLO ${isConnect}"
+        text.value = "Boom 에 오신 것을 환영합니다"
+        haveName.value = true
         Log.e("LoginViewModel","LoginServer Connect : ${isConnect}")
     }
 
 
     fun loginSucced(userId: Long){
-        boomLogin.value?.setClientUserId(userId)
+        Login.setClientUserId(userId)
+
         if(isConnect){
-            text.value = "현재 서버는 정상 입니다 {${boomLogin.value?.isNoNameUser}}"
+            text.postValue("현재 서버는 정상 입니다")
         }else{
-            text.value = "현재 서버는 점검 중 입니다. {$userId}"
+            text.postValue("현재 서버는 점검 중 입니다")
         }
 
-    }
-
-    //닉네임을 생성해야 하는지 체크
-    fun isCreateNameFirst(): Boolean{
-
-        println(boomLogin.value?.isNoNameUser)
-        return boomLogin.value?.isNoNameUser == true
     }
 
 

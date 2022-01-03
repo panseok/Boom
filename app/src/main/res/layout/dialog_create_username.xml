@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="logindvm"
+            type="com.olacompany.boom.viewmodel.login.CreateNameViewModel"/>
     </data>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -40,8 +42,9 @@
                 android:background="@drawable/comment2_all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/createUserNameEditText"
                 android:layout_margin="10dp"
+                android:text="@={logindvm.name}"
+                android:textColor="@color/white"
                 android:hint="@string/createUserNameHint"
                 android:inputType="textPersonName"
                 android:longClickable="false"
@@ -52,7 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:padding="5dp"
-                android:id="@+id/createUserNameTextView"
+                android:text="@{logindvm.checkNameNotice}"
+                android:textColor="@color/white"
                 />
             <View
                 android:layout_width="match_parent"
@@ -63,8 +67,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="확인"
-                android:id="@+id/btn_login_createusername_ok"
-                />
+                android:onClick="@{() -> logindvm.test()}" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"/>
